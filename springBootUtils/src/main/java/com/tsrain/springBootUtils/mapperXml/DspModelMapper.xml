@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tsrain.springBootUtils.mapper.DspModelMapper">
+
+	<!-- 通用查询映射结果 -->
+	<resultMap id="BaseResultMap" type="com.tsrain.springBootUtils.entity.DspModel">
+		<result column="MODEL_NAME" property="modelName" />
+		<result column="TABLE_NAME" property="tableName" />
+		<result column="CREATE_TIME" property="createTime" />
+		<result column="UPDATE_TIME" property="updateTime" />
+		<result column="STATUS" property="status" />
+	</resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        MODEL_NAME, TABLE_NAME, CREATE_TIME, UPDATE_TIME, STATUS
+    </sql>
+
+</mapper>
