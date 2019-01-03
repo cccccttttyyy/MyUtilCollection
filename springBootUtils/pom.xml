@@ -48,10 +48,15 @@
 			<artifactId>mysql-connector-java</artifactId>
 		</dependency>
 		<!--mybatis自动工具-->
+		<!--<dependency>-->
+			<!--<groupId>org.mybatis.spring.boot</groupId>-->
+			<!--<artifactId>mybatis-spring-boot-starter</artifactId>-->
+			<!--<version>1.1.1</version>-->
+		<!--</dependency>-->
 		<dependency>
 			<groupId>com.baomidou</groupId>
-			<artifactId>mybatis-plus</artifactId>
-			<version>2.1-gamma</version>
+			<artifactId>mybatis-plus-boot-starter</artifactId>
+			<version>3.0.6</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.velocity</groupId>
