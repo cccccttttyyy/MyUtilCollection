@@ -1,16 +1,16 @@
 package com.tsrain.springBootUtils.controller;
 
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Set;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
 
 /**
  * 测试连接数据库  jdbcTemplate方式
@@ -22,6 +22,10 @@ public class DbController {
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
+    @RequestMapping("/hello")
+    public String index() {
+        return "Hello hello World";
+    }
     @RequestMapping("/getUsers")
     public List<Map<String, Object>> getDbType() {
         String sql = "select * from aaa";
