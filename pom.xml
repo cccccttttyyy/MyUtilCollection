@@ -12,8 +12,8 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <configuration>
-                    <source>7</source>
-                    <target>7</target>
+                    <source>8</source>
+                    <target>8</target>
                 </configuration>
             </plugin>
         </plugins>
@@ -124,8 +124,40 @@
             <artifactId>hutool-core</artifactId>
             <version>4.3.2</version>
         </dependency>
+        <dependency>
+            <groupId>org.apache.livy</groupId>
+            <artifactId>livy-api</artifactId>
+            <version>0.5.0-incubating</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/com.cloudera.livy/livy-scala-api -->
+        <dependency>
+            <groupId>org.apache.livy</groupId>
+            <artifactId>livy-scala-api_2.11</artifactId>
+            <version>0.5.0-incubating</version>
+        </dependency>
 
+        <dependency>
+            <groupId>org.apache.livy</groupId>
+            <artifactId>livy-client-http</artifactId>
+            <version>0.5.0-incubating</version>
+        </dependency>
+        <dependency>
+            <groupId>org.elasticsearch.client</groupId>
+            <artifactId>elasticsearch-rest-high-level-client</artifactId>
+            <version>6.3.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.elasticsearch</groupId>
+            <artifactId>elasticsearch</artifactId>
+            <version>6.3.0</version>
+        </dependency>
 
+        <!-- https://mvnrepository.com/artifact/org.apache.httpcomponents/httpclient -->
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpclient</artifactId>
+            <version>4.5.7</version>
+        </dependency>
 
 
     </dependencies>
