@@ -2,15 +2,18 @@ package elasticsearch;
 
 import properties.PropertiesBuilder;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;
 
 
-public class ElasticSearchConstant {
+public class ElasticSearchConstant implements Serializable{
 
 	public static List<String> ES_HOSTS = new ArrayList<String>();
+	
+	public static String CLUSTER_NAME = "elasticsearch";
 	
 	public static int REQUEST_CONNECT_TIMEOUT = 60000;
 	
@@ -26,16 +29,19 @@ public class ElasticSearchConstant {
 	
 	public static int MAX_RETRY_TIMEOUT = 300000;
 
-	public static boolean IS_BULK = true;//elasticsearch 是否批量创建
+	public static boolean IS_BULK = false;//elasticsearch 是否批量创建
 
 	public static int BULK_ACTIONS = 10000;//elasticsearch 批次数量
 
 	public static int BULK_SIZE = 5;//elastisearch 批次大小单位MB
 	
+	public static int FLUSH_INTERVAL = 5;//flush间隔 单位s
+	
 	public static int CONCURRENT_REQUESTS = 1;
 	
 	static {
-		Properties prop = PropertiesBuilder.getConfig("elastic-rest-client.properties");
+		Properties prop = PropertiesBuilder.getConfig("elastic-transport-client.properties");
+		CLUSTER_NAME = prop.getProperty("cluster.name");
 		ES_HOSTS = Arrays.asList(prop.getProperty("rest.host").split(","));
 		REQUEST_CONNECT_TIMEOUT = Integer.parseInt(prop.getProperty("request.connect.timeout"));
 		REQUEST_SOCKET_TIMEOUT = Integer.parseInt(prop.getProperty("request.socket.timeout"));
@@ -45,6 +51,7 @@ public class ElasticSearchConstant {
 		HTTPCLIENT_SO_TIMEOUT = Integer.parseInt(prop.getProperty("httpclient.so.timeout"));
 		MAX_RETRY_TIMEOUT = Integer.parseInt(prop.getProperty("max.retry.timeout"));
 		CONCURRENT_REQUESTS = Integer.parseInt(prop.getProperty("concurrent.requests"));
+		FLUSH_INTERVAL = Integer.parseInt(prop.getProperty("flush.interval"));
 		String isBulk = prop.get("is.bulk").toString();
 		if(isBulk.equals("true")){
 			IS_BULK = true;
