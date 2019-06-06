@@ -5,7 +5,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
-/** 
+/**
  * <Description> 日期处理工具类<br> 
  *  
  * @author wang.yong<br>
@@ -14,7 +14,7 @@ import java.util.GregorianCalendar;
  * @see com.inspur.datafactory.common <br>
  */
 public class DateUtils {
-	
+
 	public static final String DATETIME = "yyyy-MM-dd HH:mm:ss";
 	public static final String DATE = "yyyy-MM-dd";
 	public static final String SHORTDATE = "yy-MM-dd";
