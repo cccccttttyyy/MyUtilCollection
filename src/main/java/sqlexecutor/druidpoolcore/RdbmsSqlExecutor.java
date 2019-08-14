@@ -1,4 +1,4 @@
-package sqlexecutor.core;
+package sqlexecutor.druidpoolcore;
 
 import com.alibaba.druid.pool.DruidPooledConnection;
 import org.slf4j.Logger;

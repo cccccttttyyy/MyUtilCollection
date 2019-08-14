@@ -7,38 +7,33 @@ import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * 有向带权图
- *
  */
 public class Graph implements Serializable, Cloneable {
 
-    private  ConcurrentHashMap<String, Vertex> vertexsMap; // 存储所有的顶点
-
-    private class Vertex implements Serializable {
-        private String name; // 顶点名称
-        private int data;
-        private Edge next; // 下一段弧
-
-        Vertex(String name, Edge next) {
-            this.name = name;
-            this.data = 0;
-            this.next = next;
-        }
-    }
-
-    private class Edge implements Serializable {
-        private String name; // 被指向顶点名称
-        private int weight; // 弧的权值
-        private Edge next; // 下一段弧
-
-        Edge(String name, int weight, Edge next) {
-            this.name = name;
-            this.weight = weight;
-            this.next = next;
-        }
-    }
+    private ConcurrentHashMap<String, Vertex> vertexsMap; // 存储所有的顶点
 
     Graph() {
         this.vertexsMap = new ConcurrentHashMap<>();
+    }
+
+    public static void main(String[] args) {
+        Graph graph = new Graph();
+        graph.insertVertex("A");
+        graph.insertVertex("B");
+        graph.insertVertex("C");
+        graph.insertVertex("D");
+        graph.insertVertex("E");
+        graph.insertVertex("F");
+
+        graph.insertEdge("C", "A", 1);
+        graph.insertEdge("F", "C", 2);
+        graph.insertEdge("A", "B", 4);
+        graph.insertEdge("E", "B", 2);
+        graph.insertEdge("A", "D", 5);
+        graph.insertEdge("D", "F", 4);
+        graph.insertEdge("D", "E", 3);
+
+        graph.print();
     }
 
     public synchronized Map<String, Vertex> getVertexsMap() {
@@ -71,9 +66,9 @@ public class Graph implements Serializable, Cloneable {
             lastEdge.next = edge;
         }
     }
-    
+
     //删除某个点
-    public  synchronized void removeVertex(String vertexName) {
+    public synchronized void removeVertex(String vertexName) {
         if (!vertexsMap.containsKey(vertexName)) {
             return;
         }
@@ -100,8 +95,6 @@ public class Graph implements Serializable, Cloneable {
         }
         vertexsMap.remove(vertexName);
     }
-
-   
 
     // 获得出度为0的点
     public synchronized List<String> getCanRemoveVertex() {
@@ -144,23 +137,27 @@ public class Graph implements Serializable, Cloneable {
         }
     }
 
-    public static void main(String[] args) {
-        Graph graph = new Graph();
-        graph.insertVertex("A");
-        graph.insertVertex("B");
-        graph.insertVertex("C");
-        graph.insertVertex("D");
-        graph.insertVertex("E");
-        graph.insertVertex("F");
+    private class Vertex implements Serializable {
+        private String name; // 顶点名称
+        private int data;
+        private Edge next; // 下一段弧
 
-        graph.insertEdge("C", "A", 1);
-        graph.insertEdge("F", "C", 2);
-        graph.insertEdge("A", "B", 4);
-        graph.insertEdge("E", "B", 2);
-        graph.insertEdge("A", "D", 5);
-        graph.insertEdge("D", "F", 4);
-        graph.insertEdge("D", "E", 3);
+        Vertex(String name, Edge next) {
+            this.name = name;
+            this.data = 0;
+            this.next = next;
+        }
+    }
 
-        graph.print();
+    private class Edge implements Serializable {
+        private String name; // 被指向顶点名称
+        private int weight; // 弧的权值
+        private Edge next; // 下一段弧
+
+        Edge(String name, int weight, Edge next) {
+            this.name = name;
+            this.weight = weight;
+            this.next = next;
+        }
     }
 }

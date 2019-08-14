@@ -1,6 +1,6 @@
 package design_pattern.factory_pattern;
 
-public class GreekPizza extends  Pizza {
+public class GreekPizza extends Pizza {
     public void prepare() {
 
     }

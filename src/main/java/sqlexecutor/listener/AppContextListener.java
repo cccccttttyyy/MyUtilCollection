@@ -5,7 +5,6 @@ import sqlexecutor.pool.DBManagerCache;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
-import javax.servlet.annotation.WebListener;
 import java.sql.DriverManager;
 
 /**
@@ -13,7 +12,7 @@ import java.sql.DriverManager;
  *
  * @author cuitianyu
  */
-@WebListener
+//@WebListener
 public class AppContextListener implements ServletContextListener {
 
     public void contextDestroyed(ServletContextEvent event) {

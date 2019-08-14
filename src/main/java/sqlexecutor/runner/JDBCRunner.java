@@ -15,7 +15,7 @@ import java.sql.*;
 import java.util.Arrays;
 
 /**
- * jdbc基本执行器
+ * jdbc 带连接池的基本执行器
  *
  * @author cuitianyu
  */
@@ -312,10 +312,9 @@ public class JDBCRunner {
      * can override to provide special handling like logging.
      *
      * @param conn Connection to close
-     * @throws SQLException if a database access error occurs
      * @since DbUtils 1.1
      */
-    protected void close(DruidPooledConnection conn) throws SQLException {
+    protected void close(DruidPooledConnection conn) {
         if (conn != null) {
             DataSourceUtils.closeConn(conn);
         }

@@ -10,13 +10,9 @@ import java.util.Properties;
 public class ReadProperties {
 
     /**
-     *
-     * @param fileName
-     *            文件名
-     * @param key
-     *            key
-     * @param defaultValue
-     *            NULL的时候默认返回值
+     * @param fileName     文件名
+     * @param key          key
+     * @param defaultValue NULL的时候默认返回值
      * @return
      */
     public static Object getPropertyFromConfiguration(String fileName, String key, Object defaultValue) {

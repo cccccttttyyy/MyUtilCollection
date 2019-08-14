@@ -1,4 +1,4 @@
-package sqlexecutor.core;
+package sqlexecutor.druidpoolcore;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -9,19 +9,17 @@ import sqlexecutor.pool.DBManager;
 import sqlexecutor.runner.JDBCRunner;
 
 /**
- * https://cwiki.apache.org/confluence/display/Hive/Hive+Transactions
- * Hive执行器
+ * Hbase执行器
  *
  * @author cuitianyu
  */
-public class HiveSqlExecutor extends AbstractExecutor implements SqlExecutor {
+public class HbaseSqlExecutor extends AbstractExecutor implements SqlExecutor {
 
-    private static final Logger log = LoggerFactory.getLogger(RdbmsSqlExecutor.class);
+    private static final Logger log = LoggerFactory.getLogger(HbaseSqlExecutor.class);
 
-    public HiveSqlExecutor(DBManager db) {
+    public HbaseSqlExecutor(DBManager dbManager) {
         runner = JDBCRunner.getRunner(db);
-        this.db = db;
-
+        this.db = dbManager;
     }
 
     @Override
@@ -35,15 +33,12 @@ public class HiveSqlExecutor extends AbstractExecutor implements SqlExecutor {
             int update;
             switch (ExecuteResultType.getByValue(firstLetter)) {
                 case SELECT:
-                case SHOW:
-                case DESCRIBE:
                     er = runner.query(sql, new ExecuteResultHandler());
                     return er;
                 case CREATE:
                 case ALTER:
                 case DROP:
-                case INSERT:
-                case UPDATE:
+                case UPSERT:
                 case DELETE:
                 case UNKNOW:
                 default:
@@ -61,12 +56,14 @@ public class HiveSqlExecutor extends AbstractExecutor implements SqlExecutor {
 
     @Override
     public void setAutoCommit(Boolean flag) {
-        log.info("HIVE Transactions are not supported untile now");
+        log.info("Hbase Transactions are not supported untile now");
+
     }
 
     @Override
     public void commit() {
-        log.info("HIVE Transactions are not supported untile now");
+        log.info("Hbase Transactions are not supported untile now");
+
     }
 
 }

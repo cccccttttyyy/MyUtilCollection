@@ -14,8 +14,8 @@ public class DataSourceUtils extends org.springframework.jdbc.datasource.DataSou
      * 关闭连接
      *
      * @param conn 需要关闭的连接
-	 */
-	public static void closeConn(DruidPooledConnection conn) {
+     */
+    public static void closeConn(DruidPooledConnection conn) {
         try {
             if (conn != null && !conn.isClosed()) {
                 conn.setAutoCommit(true);
@@ -33,9 +33,8 @@ public class DataSourceUtils extends org.springframework.jdbc.datasource.DataSou
      * 提交并关闭连接
      *
      * @param conn 需要关闭的连接
-     * @throws SQLException
      */
-    public static void commitAndCloseConn(DruidPooledConnection conn) throws SQLException {
+    public static void commitAndCloseConn(DruidPooledConnection conn) {
         try {
             conn.commit();
         } catch (SQLException e) {
@@ -48,9 +47,8 @@ public class DataSourceUtils extends org.springframework.jdbc.datasource.DataSou
     /**
      * 事务回滚且释放资源
      *
-     * @throws SQLException
      */
-    public static void rollbackAndCloseConn(DruidPooledConnection conn) throws SQLException {
+    public static void rollbackAndCloseConn(DruidPooledConnection conn) {
         try {
             conn.rollback();
         } catch (SQLException e) {

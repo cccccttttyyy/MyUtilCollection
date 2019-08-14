@@ -1,8 +1,8 @@
-package sqlexecutor.core;
+package sqlexecutor.singlecore;
 
-import sqlexecutor.pool.DBManager;
 import sqlexecutor.runner.JDBCRunner;
 
+import java.sql.Connection;
 import java.sql.SQLException;
 
 /**
@@ -12,7 +12,6 @@ import java.sql.SQLException;
  */
 public abstract class AbstractExecutor {
 
-    protected DBManager db = null;
     protected JDBCRunner runner = null;
 
     public AbstractExecutor() {
@@ -26,11 +25,18 @@ public abstract class AbstractExecutor {
     public boolean cancel() {
         try {
             runner.cancelStmt();
-            return true;
         } catch (SQLException e) {
             e.printStackTrace();
-            return false;
         }
-
+        return true;
     }
+
+    /**
+     * 获取Connection连接
+     *
+     * @return
+     * @throws SQLException
+     * @throws ClassNotFoundException
+     */
+    abstract public Connection getConn() throws SQLException;
 }

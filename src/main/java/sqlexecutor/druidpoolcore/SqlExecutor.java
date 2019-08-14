@@ -1,4 +1,4 @@
-package sqlexecutor.core;
+package sqlexecutor.druidpoolcore;
 
 import sqlexecutor.pojo.ExecuteResult;
 

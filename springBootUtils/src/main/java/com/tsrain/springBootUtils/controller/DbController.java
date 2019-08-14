@@ -26,6 +26,7 @@ public class DbController {
     public String index() {
         return "Hello hello World";
     }
+
     @RequestMapping("/getUsers")
     public List<Map<String, Object>> getDbType() {
         String sql = "select * from aaa";
@@ -35,7 +36,7 @@ public class DbController {
             if (entries != null) {
                 Iterator<Entry<String, Object>> iterator = entries.iterator();
                 while (iterator.hasNext()) {
-                    Entry<String, Object> entry = (Entry<String, Object>) iterator.next();
+                    Entry<String, Object> entry = iterator.next();
                     Object key = entry.getKey();
                     Object value = entry.getValue();
                     System.out.println(key + ":" + value);
@@ -44,6 +45,7 @@ public class DbController {
         }
         return list;
     }
+
     @RequestMapping("/user/{id}")
     public Map<String, Object> getUser(@PathVariable String id) {
         Map<String, Object> map = null;

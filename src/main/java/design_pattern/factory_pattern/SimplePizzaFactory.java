@@ -1,13 +1,13 @@
 package design_pattern.factory_pattern;
 
 public class SimplePizzaFactory {
-    public Pizza createPizza(String type){
+    public Pizza createPizza(String type) {
         Pizza pizza = null;
         if (type.equals("cheese")) {
             pizza = new CheesePizza();
-        }else if(type.equals("greek")){
+        } else if (type.equals("greek")) {
             pizza = new GreekPizza();
-        }else if (type.equals("pepperoni")){
+        } else if (type.equals("pepperoni")) {
             pizza = new PepperoniPizza();
         }
         return pizza;

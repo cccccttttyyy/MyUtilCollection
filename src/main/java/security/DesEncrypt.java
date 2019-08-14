@@ -12,6 +12,7 @@ import java.security.Security;
  */
 public class DesEncrypt {
     private static final String Algorithm = "DES"; // 定义 加密算法,可用
+
     // DES,DESede,Blowfish
     // src为被加密的数据缓冲区（源）
     public static byte[] encryptMode(byte[] keybyte, byte[] src) {

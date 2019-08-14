@@ -1,38 +1,60 @@
 package jdbc;
 
-import java.sql.Connection;
-import java.sql.DatabaseMetaData;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
-import java.sql.SQLException;
+import String.StringUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.apache.commons.net.telnet.TelnetClient;
+
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.apache.commons.net.telnet.TelnetClient;
-import String.StringUtils;
-
 
 /**
  * jdbc工具类
- * 
+ *
  * @author liutx
  */
 public class JdbcUtils {
     public static final String TABLE_TYPE = "TABLqE";
 
     public static final String VIEW_TYPE = "VIEW";
+    /**
+     * 支持的驱动
+     */
+    public static final String driver_mysql = "com.mysql.jdbc.Driver";
+    public static final String driver_hbase = "hbase.zookeeper.quorum";
+    public static final String driver_oracle = "oracle.jdbc.driver.OracleDriver";
 
+    /**
+     * 根据数据源信息获取数据库链接conn
+     *
+     * @return
+     *//*
+    public static Connection getConnByDataSource(Map<String, Object> dataSource) {
+        return ConnectionManager.getPooledConnection(dataSource);
+    }*/
+    public static final String driver_sqlserver = "com.microsoft.sqlserver.jdbc.SQLServerDriver";
+
+    /**
+     * 根据数据源信息获取数据库链接conn,元数据同步专用（需要同步备注信息非常慢，不适用取数据及其他一般获取连接方式）
+     *
+     * @return
+     */
+   /* public static Connection getConnByDataSourceOnlyMetaSyn(Map<String, Object> dataSource) {
+        return ConnectionManager.getConnByDataSourceOnlyMetaSyn(dataSource);
+    }*/
+    public static final String driver_hive = "org.apache.hadoop.hive.jdbc.HiveDriver";// Apache版本hive的jdbc驱动
+    public static final String driver_hive2 = "org.apache.hive.jdbc.HiveDriver";// CDH版本hive的jdbc驱动
+    public static final String driver_postgresql = "org.postgresql.Driver";
+    public static final String driver_oscar = "com.oscar.Driver";// 神通数据库
     private static Log log = LogFactory.getLog(JdbcUtils.class);// 日志
 
     /**
      * 测试是否能连通指定的ip和端口
-     * 
+     *
      * @param ip
      * @param port
      * @return
@@ -60,18 +82,14 @@ public class JdbcUtils {
      * <p>
      * Date: 2015年3月21日 下午2:02:50<br/>
      * <p>
-     * 
-     * @param conn
-     *            数据连接
-     * @param sql
-     *            执行sql
-     * @param objs
-     *            数据集合
-     * @throws SQLException
      *
+     * @param conn 数据连接
+     * @param sql  执行sql
+     * @param objs 数据集合
+     * @throws SQLException
      */
     public static void insertBatch(Connection conn, String sql, List<Map<Integer, String>> objs) throws SQLException {
-    	log.info("insertBatch插入Sql："+sql);
+        log.info("insertBatch插入Sql：" + sql);
         PreparedStatement ps = null;
         try {
             ps = conn.prepareStatement(sql);
@@ -100,30 +118,21 @@ public class JdbcUtils {
     }
 
     /**
-     * 根据数据源信息获取数据库链接conn
-     * 
-     * @return
-     *//*
-    public static Connection getConnByDataSource(Map<String, Object> dataSource) {
-        return ConnectionManager.getPooledConnection(dataSource);
-    }*/
-    /**
-     * 
-     * @title getJDBCConnection<br/>
-     * <p>Description: 
-     * <br>通过原生的JDBC获取连接，不放入连接池
-     * @author heshenghao<br>
-     * <p>Date: 2018年10月17日 下午3:20:21<br/>
-     * <p>
      * @param driverName
      * @param jdbcurl
      * @param uname
      * @param pword
-     * @return   
+     * @return
+     * @title getJDBCConnection<br       />
+     * <p>Description:
+     * <br>通过原生的JDBC获取连接，不放入连接池
+     * @author heshenghao<br>
+     * <p>Date: 2018年10月17日 下午3:20:21<br/>
+     * <p>
      * @see Connection
      */
     public static Connection getJDBCConnection(String driverName, String jdbcurl, String uname, String pword) {
-       
+
         String jdbcUrl = jdbcurl;
         String userName = uname;
         String password = pword;
@@ -138,19 +147,10 @@ public class JdbcUtils {
         }
         return conn;
     }
-   
-    /**
-     * 根据数据源信息获取数据库链接conn,元数据同步专用（需要同步备注信息非常慢，不适用取数据及其他一般获取连接方式）
-     * 
-     * @return
-     */
-   /* public static Connection getConnByDataSourceOnlyMetaSyn(Map<String, Object> dataSource) {
-        return ConnectionManager.getConnByDataSourceOnlyMetaSyn(dataSource);
-    }*/
-   
+
     /**
      * 获取数据库所有的schem
-     * 
+     *
      * @param Connection
      * @return List<String>
      */
@@ -180,7 +180,7 @@ public class JdbcUtils {
 
     /**
      * 获取元数据API
-     * 
+     *
      * @param conn
      * @return
      */
@@ -202,7 +202,7 @@ public class JdbcUtils {
 
     /**
      * 根据数据库类型获取对应的schame
-     * 
+     *
      * @param dbType
      * @param dbName
      * @param user
@@ -212,22 +212,22 @@ public class JdbcUtils {
         if ("mysql".equals(dbType)) {// mysql的schema是数据库名
             schema = String.valueOf(dbName);
         } else if ("oracle".equals(dbType)) {
-        	//oracle 的schema大小写区分是需要配置的，大写通用
+            //oracle 的schema大小写区分是需要配置的，大写通用
             schema = String.valueOf(user).toUpperCase();// oracle是用户名
-            
+
         } else if ("sqlserver".equals(dbType)) {
             schema = "dbo";// sqlserver是dbo
-        } else if("db2".equals(dbType)) {
-        	schema = String.valueOf(user); // db2的schema是用户名
-        }else if("postgresql".equals(dbType)) {
-        	schema = "public"; // postgres的schema暂时都为public
+        } else if ("db2".equals(dbType)) {
+            schema = String.valueOf(user); // db2的schema是用户名
+        } else if ("postgresql".equals(dbType)) {
+            schema = "public"; // postgres的schema暂时都为public
         }
         return schema;
     }
 
     /**
      * 获取数据库所有的schem
-     * 
+     *
      * @param Connection
      * @return
      */
@@ -262,19 +262,17 @@ public class JdbcUtils {
 
     /**
      * 判断表或者视图是否存在
-     * 
+     *
      * @param Connection
-     * @param schema
-     *            模式名称：oracle(用户名);mysql(数据库名);sqlServer(dbo)
-     * @param Type
-     *            (TABLE和VIEW两种)
+     * @param schema     模式名称：oracle(用户名);mysql(数据库名);sqlServer(dbo)
+     * @param Type       (TABLE和VIEW两种)
      * @return
      */
     public static boolean isExistTable(Connection conn, String schema, String tableName, String type) {
         ResultSet rs = null;
         try {
             DatabaseMetaData dbmd = getDatabaseMetaData(conn);
-            rs = dbmd.getTables(null, schema, tableName, new String[] {type });
+            rs = dbmd.getTables(null, schema, tableName, new String[]{type});
             if (rs != null)
                 return true;
         } catch (SQLException e) {
@@ -297,12 +295,10 @@ public class JdbcUtils {
 
     /**
      * 获取对给定表的主键列的描述
-     * 
+     *
      * @param Connection
-     * @param schema
-     *            模式名称：oracle(用户名);mysql(数据库名);sqlServer(dbo)
-     * @param tableName
-     *            表名称
+     * @param schema     模式名称：oracle(用户名);mysql(数据库名);sqlServer(dbo)
+     * @param tableName  表名称
      */
     public static List<Map<String, Object>> getPrimaryKeys(Connection conn, String schema, String tableName) {
         List<Map<String, Object>> result = new ArrayList<Map<String, Object>>();
@@ -313,15 +309,15 @@ public class JdbcUtils {
             while (rs.next()) {
                 Map<String, Object> resultMap = new HashMap<String, Object>();
                 resultMap.put("TABLE_SCHEM", rs.getObject("TABLE_SCHEM"));// 表模式（可为
-                                                                          // null）
+                // null）
                 resultMap.put("TABLE_NAME", rs.getString("TABLE_NAME"));// 表名称
                 resultMap.put("COLUMN_NAME", rs.getString("COLUMN_NAME"));// 列名称
                 resultMap.put("KEY_SEQ", rs.getString("KEY_SEQ"));// 主键中的序列号（值 1
-                                                                  // 表示主键中的第一列，值
-                                                                  // 2
-                                                                  // 表示主键中的第二列）。
+                // 表示主键中的第一列，值
+                // 2
+                // 表示主键中的第二列）。
                 resultMap.put("PK_NAME", rs.getString("PK_NAME"));// 主键的名称（可为
-                                                                  // null）
+                // null）
                 result.add(resultMap);
             }
         } catch (SQLException e) {
@@ -341,12 +337,10 @@ public class JdbcUtils {
 
     /**
      * 获取引用给定表的主键列（表导入的外键）的外键列的描述
-     * 
+     *
      * @param Connection
-     * @param schema
-     *            模式名称：oracle(用户名);mysql(数据库名);sqlServer(dbo)
-     * @param tableName
-     *            表名称
+     * @param schema     模式名称：oracle(用户名);mysql(数据库名);sqlServer(dbo)
+     * @param tableName  表名称
      * @return
      */
     public static List<Map<String, Object>> getExportedKeysList(Connection conn, String schema, String tableName) {
@@ -358,12 +352,12 @@ public class JdbcUtils {
             while (rs.next()) {
                 Map<String, Object> resultMap = new HashMap<String, Object>();
                 resultMap.put("PKTABLE_SCHEM", rs.getObject("PKTABLE_SCHEM"));// 主键表模式（可为
-                                                                              // null）
+                // null）
                 resultMap.put("PKTABLE_NAME", rs.getObject("PKTABLE_NAME"));// 主键表名称
                 resultMap.put("PKCOLUMN_NAME", rs.getString("PKCOLUMN_NAME"));// 主键列名称
                 resultMap.put("FKTABLE_SCHEM", rs.getObject("FKTABLE_SCHEM"));// 被导入的外键表模式（可能为
-                                                                              // null），该字符串可能为
-                                                                              // null
+                // null），该字符串可能为
+                // null
                 resultMap.put("FKTABLE_NAME", rs.getString("FKTABLE_NAME"));// 被导入的外键表名称
                 resultMap.put("FKCOLUMN_NAME", rs.getString("FKCOLUMN_NAME"));// 被导入的外键列名称
                 resultMap.put("PK_NAME", rs.getString("PK_NAME"));// 外键的名称
@@ -387,13 +381,10 @@ public class JdbcUtils {
 
     /**
      * 获取给定表的索引和统计信息的描述
-     * 
-     * @param Connection
-     *            conn
-     * @param schema
-     *            模式名称：oracle(用户名);mysql(数据库名);sqlServer(dbo)
-     * @param tableName
-     *            表名称
+     *
+     * @param Connection conn
+     * @param schema     模式名称：oracle(用户名);mysql(数据库名);sqlServer(dbo)
+     * @param tableName  表名称
      * @return
      */
     public static List<Map<String, Object>> getIndexInfoList(Connection conn, String schema, String tableName) {
@@ -450,17 +441,14 @@ public class JdbcUtils {
         return result;
     }
 
-    
-
     /**
      * 查询list
-     * 
-     * @param 数据库连接conn
-     *            ，执行的sql语句
+     *
+     * @param 数据库连接conn ，执行的sql语句
      * @return
      */
     public static List<Map<String, String>> queryForList(Connection conn, String sql) {
-    	log.info("queryForList查询SQL："+sql);
+        log.info("queryForList查询SQL：" + sql);
         PreparedStatement psmt = null;
         ResultSet rs = null;
         List<Map<String, String>> result = new ArrayList<Map<String, String>>();
@@ -468,7 +456,7 @@ public class JdbcUtils {
             if (conn == null)
                 return result;
             psmt = conn.prepareStatement(sql);
-            psmt.setQueryTimeout(5*60);
+            psmt.setQueryTimeout(5 * 60);
             rs = psmt.executeQuery();
             ResultSetMetaData md = rs.getMetaData(); // 得到结果集(rs)的结构信息，比如字段数、字段名等
             int columnCount = md.getColumnCount(); // 返回此 ResultSet 对象中的列数
@@ -510,20 +498,17 @@ public class JdbcUtils {
         return result;
     }
 
-
-
     /**
      * 查询单条记录（改了toString）
-     * 
-     * @param 数据库连接conn
-     *            ，执行的sql语句
+     *
+     * @param 数据库连接conn ，执行的sql语句
      * @return
      */
     public static Map<String, String> queryForMap(Connection conn, String sql) {
         PreparedStatement psmt = null;
         ResultSet rs = null;
         Map<String, String> result = null;//改了toString
-        log.info("queryForMap查询Sql："+sql);
+        log.info("queryForMap查询Sql：" + sql);
         try {
             psmt = conn.prepareStatement(sql);
             rs = psmt.executeQuery();
@@ -532,18 +517,18 @@ public class JdbcUtils {
             while (rs.next()) {
                 result = new HashMap<String, String>(columnCount);
                 for (int i = 1; i <= columnCount; i++) {
-                	String name = md.getColumnLabel(i);
-                	Object value = rs.getObject(i);
-                	if(null == value) {
-                		value = "null";
-                	}
+                    String name = md.getColumnLabel(i);
+                    Object value = rs.getObject(i);
+                    if (null == value) {
+                        value = "null";
+                    }
                     result.put(name, value.toString());//改了toString
                 }
             }
         } catch (SQLException e) {
             log.error("获取单条结果出现异常", e);
-        } catch(Exception e){
-        	log.error("获取单条结果出现异常", e);
+        } catch (Exception e) {
+            log.error("获取单条结果出现异常", e);
         } finally {
             if (rs != null) {
                 try {
@@ -571,13 +556,12 @@ public class JdbcUtils {
 
     /**
      * 查询总记录数
-     * 
-     * @param   数据库连接conn
-     *            ，执行的sql语句
+     *
+     * @param 数据库连接conn ，执行的sql语句
      * @return
      */
     public static int queryForCount(Connection conn, String sql) {
-    	log.info("queryForCount查询Sql："+sql);
+        log.info("queryForCount查询Sql：" + sql);
         PreparedStatement psmt = null;
         ResultSet rs = null;
         int count = 0;
@@ -617,14 +601,13 @@ public class JdbcUtils {
 
     /**
      * 执行SQL语句
-     * 
-     * @param 数据库连接conn
-     *            ，执行的sql语句
+     *
+     * @param 数据库连接conn ，执行的sql语句
      * @return
      * @throws Exception
      */
     public static boolean executeSql(Connection conn, String sql) throws Exception {
-    	log.info("executeSql执行Sql："+sql);
+        log.info("executeSql执行Sql：" + sql);
         PreparedStatement psmt = null;
         boolean flag = false;
         try {
@@ -648,8 +631,9 @@ public class JdbcUtils {
         }
         return flag;
     }
+
     public static boolean executeCreateTableSql(Connection conn, String sql) throws Exception {
-    	log.info("executeSql执行Sql："+sql);
+        log.info("executeSql执行Sql：" + sql);
         PreparedStatement psmt = null;
         boolean flag = false;
         try {
@@ -676,7 +660,7 @@ public class JdbcUtils {
 
     /**
      * 将resultMap转化成普通map
-     * 
+     *
      * @param rs
      * @return
      * @throws SQLException
@@ -716,7 +700,7 @@ public class JdbcUtils {
 
     /**
      * 将resultMap转化成普通map
-     * 
+     *
      * @return
      */
     public static Map<String, Object> getResultMapByResultSet(ResultSet rs) throws SQLException {
@@ -732,27 +716,8 @@ public class JdbcUtils {
     }
 
     /**
-     * 支持的驱动
-     */
-    public static final String driver_mysql = "com.mysql.jdbc.Driver";
-
-    public static final String driver_hbase = "hbase.zookeeper.quorum";
-
-    public static final String driver_oracle = "oracle.jdbc.driver.OracleDriver";
-
-    public static final String driver_sqlserver = "com.microsoft.sqlserver.jdbc.SQLServerDriver";
-
-    public static final String driver_hive = "org.apache.hadoop.hive.jdbc.HiveDriver";// Apache版本hive的jdbc驱动
-
-    public static final String driver_hive2 = "org.apache.hive.jdbc.HiveDriver";// CDH版本hive的jdbc驱动
-
-    public static final String driver_postgresql = "org.postgresql.Driver";
-
-    public static final String driver_oscar = "com.oscar.Driver";// 神通数据库
-
-    /**
      * 根据数据库类型获取驱动
-     * 
+     *
      * @param dbType
      * @return
      */
@@ -781,7 +746,7 @@ public class JdbcUtils {
 
     /**
      * 获取jdbcurl
-     * 
+     *
      * @param map
      * @return
      */
@@ -820,8 +785,7 @@ public class JdbcUtils {
             jdbc = "jdbc:scar://" + jdbc;
             if (StringUtils.isNotEmptyObject(dbName))
                 jdbc += "/" + dbName;
-        }
-        else if ("postgresql".equals(databaseType)) {
+        } else if ("postgresql".equals(databaseType)) {
             jdbc = "jdbc:postgresql://" + jdbc;
             if (StringUtils.isNotEmptyObject(dbName))
                 jdbc += "/" + dbName;
@@ -831,13 +795,13 @@ public class JdbcUtils {
 
     /**
      * 获取普通map结果集(改了toString)
-     * 
+     *
      * @param conn
      * @param sql
      * @return
      */
     public static List<Map<String, String>> queryForResultMapList(Connection conn, String sql) {
-    	log.info("queryForResultMapList查询Sql："+sql);
+        log.info("queryForResultMapList查询Sql：" + sql);
         PreparedStatement psmt = null;
         ResultSet rs = null;
         List<Map<String, String>> result = new ArrayList<Map<String, String>>();//改了toString
@@ -845,21 +809,21 @@ public class JdbcUtils {
             if (conn == null)
                 return result;
             psmt = conn.prepareStatement(sql);
-            psmt.setQueryTimeout(5*60);
+            psmt.setQueryTimeout(5 * 60);
             rs = psmt.executeQuery();
             ResultSetMetaData md = rs.getMetaData(); // 得到结果集(rs)的结构信息，比如字段数、字段名等
             int columnCount = md.getColumnCount(); // 返回此 ResultSet 对象中的列数
             while (rs.next()) {
                 Map<String, String> rowData = new HashMap<String, String>(columnCount);//改了toString
                 for (int i = 1; i <= columnCount; i++) {
-                	String name = md.getColumnLabel(i);
-                	Object value = rs.getObject(i);
-                	if(null == value) {
-                		value = "null";
-                	}
+                    String name = md.getColumnLabel(i);
+                    Object value = rs.getObject(i);
+                    if (null == value) {
+                        value = "null";
+                    }
                     //result.put(name, value.toString());//改了toString
                     //rowData.put(md.getColumnLabel(i), rs.getString(i).toString());//改成了toString
-                	rowData.put(name, value.toString());
+                    rowData.put(name, value.toString());
                 }
                 result.add(rowData);
             }
@@ -938,7 +902,7 @@ public class JdbcUtils {
         }
         return null;
     }
-    
+
     public static boolean isTableExists(Connection conn, String tableName) {
         PreparedStatement pstmt = null;
         try {
@@ -949,20 +913,20 @@ public class JdbcUtils {
         } catch (SQLException e) {
             return false;
         } finally {
-           if(null != pstmt){
-        	   try {
-				pstmt.close();
-			} catch (SQLException e) {
-				log.error("关闭psmt出现异常", e);
-			}
-           }
-           if(null != conn){
-        	   try {
-        		   conn.close();
-			} catch (SQLException e) {
-				log.error("关闭conn出现异常", e);
-			}
-           }
+            if (null != pstmt) {
+                try {
+                    pstmt.close();
+                } catch (SQLException e) {
+                    log.error("关闭psmt出现异常", e);
+                }
+            }
+            if (null != conn) {
+                try {
+                    conn.close();
+                } catch (SQLException e) {
+                    log.error("关闭conn出现异常", e);
+                }
+            }
         }
     }
 

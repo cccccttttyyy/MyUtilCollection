@@ -1,4 +1,4 @@
-package sqlexecutor.core;
+package sqlexecutor.druidpoolcore;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -9,17 +9,19 @@ import sqlexecutor.pool.DBManager;
 import sqlexecutor.runner.JDBCRunner;
 
 /**
- * Hbase执行器
+ * https://cwiki.apache.org/confluence/display/Hive/Hive+Transactions
+ * Hive执行器
  *
  * @author cuitianyu
  */
-public class HbaseSqlExecutor extends AbstractExecutor implements SqlExecutor {
+public class HiveSqlExecutor extends AbstractExecutor implements SqlExecutor {
 
-    private static final Logger log = LoggerFactory.getLogger(HbaseSqlExecutor.class);
+    private static final Logger log = LoggerFactory.getLogger(RdbmsSqlExecutor.class);
 
-    public HbaseSqlExecutor(DBManager dbManager) {
+    public HiveSqlExecutor(DBManager db) {
         runner = JDBCRunner.getRunner(db);
-        this.db = dbManager;
+        this.db = db;
+
     }
 
     @Override
@@ -33,12 +35,15 @@ public class HbaseSqlExecutor extends AbstractExecutor implements SqlExecutor {
             int update;
             switch (ExecuteResultType.getByValue(firstLetter)) {
                 case SELECT:
+                case SHOW:
+                case DESCRIBE:
                     er = runner.query(sql, new ExecuteResultHandler());
                     return er;
                 case CREATE:
                 case ALTER:
                 case DROP:
-                case UPSERT:
+                case INSERT:
+                case UPDATE:
                 case DELETE:
                 case UNKNOW:
                 default:
@@ -56,14 +61,12 @@ public class HbaseSqlExecutor extends AbstractExecutor implements SqlExecutor {
 
     @Override
     public void setAutoCommit(Boolean flag) {
-        log.info("Hbase Transactions are not supported untile now");
-
+        log.info("HIVE Transactions are not supported untile now");
     }
 
     @Override
     public void commit() {
-        log.info("Hbase Transactions are not supported untile now");
-
+        log.info("HIVE Transactions are not supported untile now");
     }
 
 }

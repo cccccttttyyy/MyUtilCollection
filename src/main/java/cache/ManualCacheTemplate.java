@@ -17,34 +17,36 @@ public class ManualCacheTemplate {
     private ManualCacheTemplate() {
         super();
     }
+
     //获取布尔值的缓存
-    public static List<String> getSimpleDb(String key){
-        try{
+    public static List<String> getSimpleDb(String key) {
+        try {
             return cacheMap.get(key);
-        }catch(NullPointerException e){
+        } catch (NullPointerException e) {
             return null;
         }
     }
 
     /**
      * 设置布尔值的缓存
+     *
      * @param key
      * @param db
      * @return
      */
-    public synchronized static boolean setSimpledb(String key, List<String> tags){
-        if (getSimpleDb(key) != null ) {//假如为真不允许被覆盖
+    public synchronized static boolean setSimpledb(String key, List<String> tags) {
+        if (getSimpleDb(key) != null) {//假如为真不允许被覆盖
             return false;
-        }else{
+        } else {
             cacheMap.put(key, tags);
             return true;
         }
     }
 
 
-
     /**
      * 得到缓存。同步静态方法
+     *
      * @param key
      * @return
      */
@@ -54,6 +56,7 @@ public class ManualCacheTemplate {
 
     /**
      * 判断是否存在一个缓存
+     *
      * @param key
      * @return
      */
@@ -68,8 +71,10 @@ public class ManualCacheTemplate {
         cacheMap.clear();
     }
 
-    /**'
+    /**
+     * '
      * 清除某一类特定缓存,通过遍历HASHMAP下的所有对象，来判断它的KEY与传入的TYPE是否匹配
+     *
      * @param type
      */
     public synchronized static void clearAll(String type) {
@@ -94,6 +99,7 @@ public class ManualCacheTemplate {
 
     /**
      * 清除指定的缓存
+     *
      * @param key
      */
     public synchronized static void clearOnly(String key) {
@@ -102,6 +108,7 @@ public class ManualCacheTemplate {
 
     /**
      * 载入缓存
+     *
      * @param key
      * @param db
      */
@@ -113,6 +120,7 @@ public class ManualCacheTemplate {
 
     /**
      * 获取缓存中的大小
+     *
      * @return
      */
     public static int getCacheSize() {
@@ -121,6 +129,7 @@ public class ManualCacheTemplate {
 
     /**
      * 获取指定的类型的大小
+     *
      * @param type
      * @return
      */
@@ -145,27 +154,30 @@ public class ManualCacheTemplate {
 
     /**
      * 获取缓存对象中的所有键值名称
+     *
      * @return
      */
-    public static ArrayList<String> getCacheAllkey() {
+    public static ArrayList getCacheAllkey() {
         ArrayList a = new ArrayList();
         try {
             Iterator i = cacheMap.entrySet().iterator();
             while (i.hasNext()) {
                 java.util.Map.Entry entry = (java.util.Map.Entry) i.next();
-                a.add((String) entry.getKey());
+                a.add(entry.getKey());
             }
-        } catch (Exception ex) {} finally {
+        } catch (Exception ex) {
+        } finally {
             return a;
         }
     }
 
     /**
      * 获取缓存对象中指定类型 的键值名称
+     *
      * @param type
      * @return
      */
-    public static ArrayList<String> getCacheListkey(String type) {
+    public static ArrayList getCacheListkey(String type) {
         ArrayList a = new ArrayList();
         String key;
         try {
@@ -177,7 +189,8 @@ public class ManualCacheTemplate {
                     a.add(key);
                 }
             }
-        } catch (Exception ex) {} finally {
+        } catch (Exception ex) {
+        } finally {
             return a;
         }
     }

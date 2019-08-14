@@ -5,7 +5,6 @@ import com.alibaba.druid.pool.DruidDataSourceFactory;
 import com.alibaba.druid.pool.DruidPooledConnection;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.apache.ibatis.datasource.DataSourceException;
 import sqlexecutor.config.PropertiesBuilder;
 import sqlexecutor.pojo.*;
 import sqlexecutor.utils.JDBCUtils;
@@ -35,7 +34,7 @@ public class DBManagerImpl implements DBManager {
             DatabaseTypeEnum type = DatabaseTypeEnum.getById(bo.getDbase_type());
             this.type = type;
             if (type.getCode().equals(-1)) {
-                throw new DataSourceException(this.getClass() + ":init dataSource error! dataSource type not found");
+//                throw new Exception(this.getClass() + ":init dataSource error! dataSource type not found");
             }
             if (DatabaseTypeEnum.ORACLE.getCode().equals(bo.getDbase_type())) {
                 dataSource.setPoolPreparedStatements(true);
@@ -162,7 +161,11 @@ public class DBManagerImpl implements DBManager {
      */
     private DruidDataSource dsCommonProperties(DruidDataSource dataSource) {
         Properties config = PropertiesBuilder.getConfig("conf/druid_pool_common.properties");
-        DruidDataSourceFactory.config(dataSource, config);
+        try {
+            DruidDataSourceFactory.config(dataSource, config);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         return dataSource;
     }
 

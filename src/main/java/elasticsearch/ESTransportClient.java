@@ -19,9 +19,9 @@ import java.util.concurrent.TimeUnit;
 
 public class ESTransportClient {
     private static final Logger log = LoggerFactory.getLogger(ESTransportClient.class);
+    private static int clientId = 1;
     private TransportClient client = null;
     private BulkProcessor bulkProcessor = null;
-    private static int clientId = 1;
 
     public ESTransportClient() {
         super();
@@ -74,7 +74,7 @@ public class ESTransportClient {
         }
         return client;
     }
-    
+
     public BulkProcessor getBulkProcessor() {
         if (!ElasticSearchConstant.IS_BULK) {
             log.error("ElasticSearchConstant.IS_BULK is false no BulkProcessor create");
@@ -83,9 +83,9 @@ public class ESTransportClient {
         if (bulkProcessor == null) {
             synchronized (ESTransportClient.class) {
                 if (bulkProcessor == null) {
-                    if(client==null) {
+                    if (client == null) {
                         init();
-                    }else {
+                    } else {
                         initBulk();
                     }
                 }
@@ -96,14 +96,14 @@ public class ESTransportClient {
 
     public void close() {
         try {
-            if(!bulkProcessor.awaitClose(5, TimeUnit.MINUTES)) {
-                log.info("clientId:"+clientId+" bulkProcessor close has waited 5min but failed , the next: force close");
+            if (!bulkProcessor.awaitClose(5, TimeUnit.MINUTES)) {
+                log.info("clientId:" + clientId + " bulkProcessor close has waited 5min but failed , the next: force close");
                 bulkProcessor.flush();
                 bulkProcessor.close();
             }
         } catch (InterruptedException e) {
             e.printStackTrace();
-        };
+        }
         client.close();
     }
 }
