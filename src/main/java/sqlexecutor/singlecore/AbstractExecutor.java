@@ -1,6 +1,6 @@
 package sqlexecutor.singlecore;
 
-import sqlexecutor.runner.JDBCRunner;
+import sqlexecutor.runner.JDBCSingleRunner;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -12,7 +12,7 @@ import java.sql.SQLException;
  */
 public abstract class AbstractExecutor {
 
-    protected JDBCRunner runner = null;
+    protected JDBCSingleRunner runner = null;
 
     public AbstractExecutor() {
     }

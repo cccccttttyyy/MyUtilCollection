@@ -1,14 +1,11 @@
 package sqlexecutor.singlecore;
 
-import com.di.common.utils.JDBCUtils;
-import com.di.dmas.common.datasource.pojo.DataBaseDriverType;
-import com.di.dmas.common.datasource.pojo.RdbmsBo;
-import com.di.dmas.common.sqlexecutor.dao.JDBCRunner;
-import com.di.dmas.common.sqlexecutor.pojo.ExecuteResult;
-import com.di.dmas.common.sqlexecutor.pojo.ExecuteResultHandler;
-import com.di.dmas.common.sqlexecutor.pojo.ExecuteResultType;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import sqlexecutor.pojo.*;
+import sqlexecutor.runner.JDBCSingleRunner;
+import sqlexecutor.utils.JDBCUtils;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -29,7 +26,7 @@ public class RdbmsSqlExecutor extends AbstractExecutor implements SqlExecutor {
 
     public RdbmsSqlExecutor(RdbmsBo db) {
         this.bo = db;
-        runner = JDBCRunner.getRunner();
+        runner = JDBCSingleRunner.getRunner();
     }
 
     @Override

@@ -7,7 +7,7 @@ public abstract class Database {
 
     abstract public int getDbase_type();
 
-    abstract public int getId();
+    abstract public String getId();
 
     abstract public int hashCode();
 

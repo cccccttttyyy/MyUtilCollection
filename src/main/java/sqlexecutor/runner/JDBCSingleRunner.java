@@ -17,8 +17,8 @@ public class JDBCSingleRunner {
     /**
      * 获取jdbc基本执行器
      */
-    public static JDBCRunner getRunner() {
-        return new JDBCRunner();
+    public static JDBCSingleRunner getRunner() {
+        return new JDBCSingleRunner();
 
     }
 
@@ -70,6 +70,7 @@ public class JDBCSingleRunner {
         try {
             stmt = this.prepareStatement(conn, sql);
             currentstmt = stmt;
+            stmt.setFetchSize(10000);
             rs = stmt.executeQuery();
             result = rsh.handle(rs);
 

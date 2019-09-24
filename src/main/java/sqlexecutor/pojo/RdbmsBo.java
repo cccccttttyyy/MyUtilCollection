@@ -6,7 +6,7 @@ package sqlexecutor.pojo;
  */
 public class RdbmsBo extends Database {
 
-    private int id;
+    private String id;
     //数据源描述
     private String dbase_desc;
     //数据库类型	0 oracle; 1 mysql; 2 sqlserver; 3 postgresql; 4 hive; 5 hbase; 6 mongodb; 7 ftp; 8 txt; 9 db2
@@ -40,11 +40,11 @@ public class RdbmsBo extends Database {
         this.connect_params = connect_params;
     }
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -147,7 +147,6 @@ public class RdbmsBo extends Database {
         result = prime * result + dbase_port;
         result = prime * result + dbase_type;
         result = prime * result + ((dbase_user == null) ? 0 : dbase_user.hashCode());
-        result = prime * result + id;
         return result;
     }
 

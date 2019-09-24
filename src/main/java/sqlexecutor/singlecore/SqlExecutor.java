@@ -2,6 +2,7 @@ package sqlexecutor.singlecore;
 
 import sqlexecutor.pojo.ExecuteResult;
 
+import java.sql.Connection;
 import java.sql.SQLException;
 
 
@@ -26,6 +27,15 @@ public interface SqlExecutor {
      * @throws SQLException
      */
     ExecuteResult execute(String sql); // 创建表的手动回滚
+
+    /**
+     * 获取Connection连接
+     *
+     * @return
+     * @throws SQLException
+     * @throws ClassNotFoundException
+     */
+    Connection getConn() throws SQLException;
 
     /**
      * 若开启了事务，提交时调用

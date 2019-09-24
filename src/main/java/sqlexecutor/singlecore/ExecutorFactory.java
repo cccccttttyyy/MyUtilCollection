@@ -1,9 +1,10 @@
 package sqlexecutor.singlecore;
 
-import com.di.dmas.common.datasource.pojo.Database;
-import com.di.dmas.common.datasource.pojo.HbaseBo;
-import com.di.dmas.common.datasource.pojo.HiveBo;
-import com.di.dmas.common.datasource.pojo.RdbmsBo;
+
+import sqlexecutor.pojo.Database;
+import sqlexecutor.pojo.HbaseBo;
+import sqlexecutor.pojo.HiveBo;
+import sqlexecutor.pojo.RdbmsBo;
 
 /**
  * 执行器工厂

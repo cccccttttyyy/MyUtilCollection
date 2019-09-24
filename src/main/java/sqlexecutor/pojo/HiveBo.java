@@ -5,7 +5,7 @@ package sqlexecutor.pojo;
  * hive数据库
  */
 public class HiveBo extends Database {
-    private int id;
+    private String id;
     //数据源描述
     private String dbase_desc;
     //数据库类型	0 oracle; 1 mysql; 2 sqlserver; 3 postgresql; 4 hive; 5 hbase; 6 mongodb; 7 ftp; 8 txt
@@ -30,7 +30,7 @@ public class HiveBo extends Database {
 
     public static HiveBo newInstance() {
         HiveBo bo = new HiveBo();
-        bo.setId(12);
+        bo.setId("12");
         bo.setDbase_ip("192.168.119.119");
         bo.setDbase_port(10000);
         bo.setDbase_type(4);
@@ -39,11 +39,11 @@ public class HiveBo extends Database {
         return bo;
     }
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -154,7 +154,6 @@ public class HiveBo extends Database {
         result = prime * result + dbase_port;
         result = prime * result + dbase_type;
         result = prime * result + ((dbase_user == null) ? 0 : dbase_user.hashCode());
-        result = prime * result + id;
         return result;
     }
 
