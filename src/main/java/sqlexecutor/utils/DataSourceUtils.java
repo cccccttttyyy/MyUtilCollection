@@ -6,7 +6,7 @@ import org.apache.commons.logging.LogFactory;
 
 import java.sql.SQLException;
 
-public class DataSourceUtils extends org.springframework.jdbc.datasource.DataSourceUtils {
+public class DataSourceUtils {
 
     protected static final Log log = LogFactory.getLog(DataSourceUtils.class);
 
@@ -23,8 +23,12 @@ public class DataSourceUtils extends org.springframework.jdbc.datasource.DataSou
         } catch (SQLException e) {
             log.error("关闭数据库连接失败：" + e);
         } finally {
-            if (conn != null && !conn.isClosed()) {
-                conn.close();
+            try {
+                if (conn != null && !conn.isClosed()) {
+                    conn.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
             }
         }
     }

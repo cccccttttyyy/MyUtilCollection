@@ -15,10 +15,10 @@ public class DBManagerFactory {
      * @return
      */
     public static DBManager getDbManager(Database db) {
-        DBManager dbManager = DBManagerCache.getDb(Integer.toString(db.getId()));
+        DBManager dbManager = DBManagerCache.getDb(db.getId());
         if (null == dbManager || dbManager.gethashcode() != db.hashCode()) {
             dbManager = new DBManagerImpl(db);
-            DBManagerCache.putDb(Integer.toString(db.getId()), dbManager);
+            DBManagerCache.putDb(db.getId(), dbManager);
         }
         return dbManager;
     }

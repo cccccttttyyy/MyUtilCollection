@@ -4,7 +4,7 @@ package sqlexecutor.singlecore;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import sqlexecutor.pojo.*;
-import sqlexecutor.runner.JDBCRunner;
+import sqlexecutor.runner.JDBCSingleRunner;
 import sqlexecutor.utils.JDBCUtils;
 
 import java.sql.Connection;
@@ -23,7 +23,7 @@ public class HiveSqlExecutor extends AbstractExecutor implements SqlExecutor {
     private HiveBo bo;
 
     public HiveSqlExecutor(HiveBo db) {
-        runner = JDBCRunner.getRunner();
+        runner = JDBCSingleRunner.getRunner();
         this.bo = db;
 
     }

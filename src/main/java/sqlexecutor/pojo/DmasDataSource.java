@@ -255,7 +255,7 @@ public class DmasDataSource {
                 hbaseBo.setHbase_rootdir(this.hbaseRootdir);
                 hbaseBo.setId(id);
                 hbaseBo.setKerberos_enable(Boolean.valueOf(this.kerberosEnable));
-                hbaseBo.setKerberos_keytab_filepath(this.kerberosKeytabFilePath);
+                hbaseBo.setKerberos_keytab_file_path(this.kerberosKeytabFilePath);
                 hbaseBo.setKerberos_principal(this.kerberosPrincipal);
                 hbaseBo.setZk_port(Integer.valueOf(this.zookeeperPort));
                 hbaseBo.setZk_quorum(this.zookeeperQuorum);

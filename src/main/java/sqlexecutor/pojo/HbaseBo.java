@@ -29,7 +29,7 @@ public class HbaseBo extends Database {
 	//创建人
 	private String create_user;
 
-	public int getId() {
+    public String getId() {
 		return id;
 	}
 

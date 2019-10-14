@@ -64,7 +64,12 @@ public class JDBCRunner {
      */
     protected PreparedStatement prepareStatement(DruidPooledConnection conn, String sql) {
 
-        PreparedStatement ps = conn.prepareStatement(sql);
+        PreparedStatement ps = null;
+        try {
+            ps = conn.prepareStatement(sql);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         return ps;
     }
 
@@ -86,7 +91,12 @@ public class JDBCRunner {
      * @since 1.6
      */
     protected PreparedStatement prepareStatement(DruidPooledConnection conn, String sql, int returnedKeys) {
-        PreparedStatement ps = conn.prepareStatement(sql, returnedKeys);
+        PreparedStatement ps = null;
+        try {
+            ps = conn.prepareStatement(sql, returnedKeys);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         return ps;
     }
 
@@ -106,7 +116,12 @@ public class JDBCRunner {
      */
     protected CallableStatement prepareCall(DruidPooledConnection conn, String sql) {
 
-        return conn.prepareCall(sql);
+        try {
+            return conn.prepareCall(sql);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     /**
