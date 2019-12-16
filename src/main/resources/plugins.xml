@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration scan="true" scanPeriod="60 seconds" debug="false">
+    <context-name>plugin-list</context-name>
+
+    <!--global variables-->
+    <property name="path" value="/home/idtt"/>
+    <property name="threshold" value="100"/>
+
+    <!--jars-->
+    <lib dir="E:/home/plugins/lib1" regex=".*plugin.jar"/>
+    <lib dir="E:/home/plugins/lib2" regex=""/>
+
+    <context-param>
+        <param-name>encode</param-name>
+        <param-value>gb2312</param-value>
+    </context-param>
+
+    <context-param>
+        <param-name>max-compute-time</param-name>
+        <param-value>${threshold}</param-value>
+    </context-param>
+
+    <!--plugins-->
+    <plugin>
+        <plugin-name>simpleRule</plugin-name>
+        <plugin-class>com.di.dmas.tag.plugin.impl.DemoRuleImpl</plugin-class>
+        <init-param>
+            <param-name>encoding</param-name>
+            <param-value>UTF-8</param-value>
+        </init-param>
+        <init-param>
+            <param-name>path</param-name>
+            <param-value>${path}</param-value>
+        </init-param>
+    </plugin>
+
+    <listener>
+        <listener-name>simpleRule-context</listener-name>
+        <listener-class>com.di.dmas.tag.plugin.listener.impl.ExampleContextListener</listener-class>
+    </listener>
+    <listener>
+        <listener-name>simpleRule-attr</listener-name>
+        <listener-class>com.di.dmas.tag.plugin.listener.impl.ExampleContextAttribute</listener-class>
+    </listener>
+
+
+</configuration>
