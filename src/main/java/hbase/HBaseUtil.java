@@ -382,7 +382,7 @@ public class HBaseUtil {
             if (startRowKey == null) {
                 //则读取表的第一行记录
                 Result firstResult = selectFirstResultRow(tableName, filterList);
-                if (firstResult.isEmpty()) {
+                if (null == firstResult || firstResult.isEmpty()) {
                     return pageModel;
                 }
                 startRowKey = firstResult.getRow();
@@ -713,7 +713,7 @@ public class HBaseUtil {
             System.out.println(" column family  :  " + Bytes.toString(kv.getFamily()));
             System.out.println(" column   :  " + Bytes.toString(kv.getQualifier()));
             System.out.println(" value   :  " + Bytes.toString(kv.getValue()));
-            System.out.println(" timestamp   :  " + String.valueOf(kv.getTimestamp()));
+            System.out.println(" timestamp   :  " + kv.getTimestamp());
             System.out.println("--------------------");
         }
     }
